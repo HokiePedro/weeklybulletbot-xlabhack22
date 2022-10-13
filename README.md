@@ -1,1 +1,0 @@
-# weeklybulletbot-xlabhack22
