@@ -1,1 +1,6 @@
-Testing readme updates
+To create the lumberjack database make sure you have docker installed.  Then run the following commands in the project /sql directory:
+
+1) docker build -t lumberjack-db ./
+2) docker run -d --name lumberjack -p 5432:5432 lumberjack-db
+
+The image will build and launch in a container.  The database script will run and create the necessary schema and tables.  The db can be accessed via port 5432.
