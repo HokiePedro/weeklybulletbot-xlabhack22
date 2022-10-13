@@ -2,6 +2,7 @@
     "name": "slack-api",
     "version": "1.0.0",
     "description": "",
+    "type": "module",
     "dependencies": {
         "@slack/bolt": "^3.12.1",
         "axios": "^1.1.2",

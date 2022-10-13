@@ -1,27 +1,35 @@
-const { App } = require('@slack/bolt');
+import express from 'express';
+import bodyParser from 'body-parser';
+import SlackCommand from './models/SlackCommand.js';
+var app = express();
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+const port = 3000;
 
-// Initializes your app with your bot token and signing secret
-const app = new App({
-    token: process.env.SLACK_BOT_TOKEN,
-    signingSecret: process.env.SLACK_SIGNING_SECRET,
-    socketMode:true,
-    appToken: process.env.APP_TOKEN,
-    port: process.env.PORT
-});
-
-app.command('/timber', async ({ command, ack, say }) => {
-    try {
-      await ack();
-      say("Yaaay! that command works!" + command.text);
-    } catch (error) {
-        console.log("err")
-      console.error(error);
+app.all('*', function (req, res, next) {
+    console.log("Headers:"+ JSON.stringify(req.headers, null, 3));
+    console.log("Body:"+ JSON.stringify(req.body));
+    next();
+})
+app.post('/', function (req, res) {
+    const slackCom = new SlackCommand(req.body);
+    console.log(slackCom.toPrettyString())
+    switch (slackCom.subCommand) {
+        case "report":
+            res.json({ body: "show report modal" });
+            break;
+        case "help":
+            res.json({ body: "show help message" });
+            break;
+        case "task":
+            res.json({ body: "show task modal" });
+            break;
+        default:
+            break;
     }
-});
+})
 
 
-(async () => {
-    // Start your app
-    await app.start();
-    console.log('⚡️ Bolt app is running!');
-})();
+app.listen(port, function () {
+   console.log(`Example app listening at ${port}`)
+})
