@@ -1,5 +1,5 @@
 import pg from 'pg';
-const client = new pg.Client({
+const pool = new pg.Pool({
     user: process.env.DB_USERNAME,
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
@@ -7,12 +7,13 @@ const client = new pg.Client({
     port: process.env.DB_PORT,
 })
 
-export function executeQuery(query) {
-    client.connect()
+export async function executeQuery(query) {
+    const client = await pool.connect();
+
     return client.query(query) // your query string here
         .then(result => result) // your callback here
         .catch(e => handleError(e.stack)) // your callback here
-        .finally(() => client.end())
+        .finally(() => client.release())
 }
 
 function handleError(stack) {
