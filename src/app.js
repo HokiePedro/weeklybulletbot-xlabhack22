@@ -10,6 +10,16 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const port = 3000;
 
+/**
+ * @todo create user if they don't exist
+ *      during user creation, update their home view of the app
+ * @todo update Report.generateReport() to use stored procedure which handles date ranges
+ * @todo update task creation to handle hours worked on task
+ * @todo open modal for report, not send message
+ * @todo `/timber task` should open a clean modal to create the task
+ * @todo log new tasks to messages section of bot, not as a response
+ */
+
 app.all('*', function (req, res, next) {
     // console.log("Headers:"+ JSON.stringify(req.headers, null, 3));
     // console.log("Body:"+ JSON.stringify(req.body));
