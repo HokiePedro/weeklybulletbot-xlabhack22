@@ -55,6 +55,14 @@ app.post('/', function (req, res) {
     }
 })
 
+/**
+ * User submits the bot home page form
+ */
+app.post('/hometab', function (req, res) {
+    console.log(req.body.payload);
+    res.json({status: "Success"});
+});
+
 function handleHelp(res) {
     res.json(Slack.getMdBlock(`
 ✅ Create a new task with \`/timber task [project] [task text]\`\n
