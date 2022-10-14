@@ -23,7 +23,9 @@ app.post('/', function (req, res) {
     switch (slackCom.subCommand) {
         case "report":
             Report.generateReport(slackCom.text)
-            res.json({ body: "show report modal" });
+                .then((md) => {
+                    res.json(Slack.getMdBlock(md));
+                })
             break;
         case "help":
             handleHelp(res);

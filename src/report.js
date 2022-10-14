@@ -4,7 +4,7 @@ export function generateReport(time) {
     const dateEnum = getDateEnumFromTime(time);
     console.log("dateEnum = ", dateEnum)
     return pg.executeQuery('SELECT * FROM lumberjack.messages')
-        .then((dbResult) => formatRows(dbResult.rows))
+        .then((dbResult) => formatRows(dateEnum, dbResult.rows))
 }
 
 // Returns a psql date range for the given enum time value
@@ -37,10 +37,28 @@ function getDateEnumFromTime(time) {
     return dateEnum;
 }
 
-function formatRows(rows) {
+function formatRows(dateEnum, rows) {
     // separate into groups by project
     // generate markdown
-    let md = ""
-    console.log(rows);
+    let md = `Report for ${dateEnum}\\n\\n`
+    const projectGroups = {};
+    rows.forEach(row => {
+        const projName = row.project.trim()
+        if(projectGroups[projName] === undefined) {
+            projectGroups[projName] = [];
+        }
+        projectGroups[projName].push({
+            text: row.message.trim(),
+            date: new Date(row.date),
+            time: row.time_worked || null,
+        });
+    });
+    Object.keys(projectGroups).forEach((key) => {
+        md += `*${key}*\\n\\n`;
+        projectGroups[key].forEach(task => {
+            md += `• ${task.text}${!!task.time ? " - " + task.time : ""}\\n`
+        })
+
+    })
     return md;
 }
