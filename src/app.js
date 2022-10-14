@@ -60,6 +60,7 @@ app.post('/', function (req, res) {
  */
 app.post('/hometab', function (req, res) {
     console.log(req.body.payload);
+    console.log(req.body.payload.view.state.values);
     res.json({status: "Success"});
 });
 
