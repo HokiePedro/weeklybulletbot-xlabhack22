@@ -16,7 +16,6 @@ export default class SlackCommand {
             this.project = this.text.split(" ")[0];
             this.text = this.text.substring(this.project.length + 1, this.text.length);
         }
-        console.log(this.text);
     }
 
     getSubCommands() {

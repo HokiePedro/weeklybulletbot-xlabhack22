@@ -44,7 +44,9 @@ app.post('/', function (req, res) {
 
 function handleHelp(res) {
     res.json(Slack.getMdBlock(`
-        👀 View all tasks with \`/timber report\`\n❓Get help at any time with \`/timber help\` or type *help* in a DM with me
+✅ Create a new task with \`/timber task [project] [task text]\`\n
+👀 All tasks grouped by project with \`/timber report [today, this month, last week]\`\n
+❓Get this text with \`/timber help\`
     `));
 }
 

@@ -1,3 +1,27 @@
+# Task Logger
+
+This slack bot solves the problem of team members not having an easy way to keep track of the tasks they have completed during the week. This bot has a single command with three sub commands `help`, `task`, and `report`.
+
+`help` - prints a useful help message that explains how to use the bot
+`task` - records a task to a given project
+`report` - with a given timeframe (today, yesterday, last week, last month, this month), return a report that can be copied into another document
+
+
+# Node.js
+
+Fill out `set_env.sh` with the needed values and run the following commands
+
+    npm run install
+    npm run start
+
+# ngrok
+
+Install [ngrok](https://ngrok.com/download) and run the following command which forwards localhost 3000 to the created ngrok.io url. This URL goes into the command request url. When a command is created and fired in Slack, this URL will get a POST with user and command data.
+
+    ngrok http 3000
+
+# Database
+
 To create the lumberjack database make sure you have docker installed.  Then run the following commands in the project /sql directory:
 
 1) docker build -t lumberjack-db ./
