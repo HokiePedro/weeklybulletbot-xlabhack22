@@ -22,7 +22,7 @@ app.post('/', function (req, res) {
 
     switch (slackCom.subCommand) {
         case "report":
-            Report.generateReport(slackCom.text)
+            Report.generateReport(slackCom)
                 .then((md) => {
                     res.json(Slack.getMdBlock(md));
                 })
@@ -31,7 +31,10 @@ app.post('/', function (req, res) {
             handleHelp(res);
             break;
         case "task":
-            res.json({ body: "show task modal" });
+            Task.createTask(slackCom)
+                .then((md) => {
+                    res.json(Slack.getMdBlock(md));
+                })
             break;
         default:
             handleHelp(res);

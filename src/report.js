@@ -1,9 +1,11 @@
 import * as pg from './utils/pgConnector.js';
 // with a given amount of time, get the data and format it
-export function generateReport(time) {
-    const dateEnum = getDateEnumFromTime(time);
+export function generateReport(slackCom) {
+    const dateEnum = getDateEnumFromTime(slackCom.text);
     console.log("dateEnum = ", dateEnum)
-    return pg.executeQuery('SELECT * FROM lumberjack.messages')
+    const query = `SELECT * FROM lumberjack.messages WHERE user_id LIKE '${slackCom.userId}%'`;
+    console.log(query);
+    return pg.executeQuery(query)
         .then((dbResult) => formatRows(dateEnum, dbResult.rows))
 }
 
@@ -40,7 +42,7 @@ function getDateEnumFromTime(time) {
 function formatRows(dateEnum, rows) {
     // separate into groups by project
     // generate markdown
-    let md = `Report for ${dateEnum}\\n\\n`
+    let md = `Report for ${dateEnum}\n\n`
     const projectGroups = {};
     rows.forEach(row => {
         const projName = row.project.trim()
@@ -54,9 +56,9 @@ function formatRows(dateEnum, rows) {
         });
     });
     Object.keys(projectGroups).forEach((key) => {
-        md += `*${key}*\\n\\n`;
+        md += `*${key}*\n\n`;
         projectGroups[key].forEach(task => {
-            md += `• ${task.text}${!!task.time ? " - " + task.time : ""}\\n`
+            md += `• ${task.text}${!!task.time ? " - " + task.time : ""}\n`
         })
 
     })

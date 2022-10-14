@@ -5,12 +5,18 @@ export default class SlackCommand {
     command = "";
     text = "";
     subCommand = "";
+    project = "";
     constructor(req) {
-        this.userId = req.user_id;
+        this.userId = req.user_id.toLowerCase();
         this.userName = req.user_name;
         this.command = req.command;
         this.text = req.text;
         this.getSubCommands();
+        if(this.subCommand === "task") {
+            this.project = this.text.split(" ")[0];
+            this.text = this.text.substring(this.project.length + 1, this.text.length);
+        }
+        console.log(this.text);
     }
 
     getSubCommands() {
