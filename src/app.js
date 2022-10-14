@@ -41,7 +41,7 @@ app.post('/', function (req, res) {
                     headers: {
                         "Content-Type" : "application/json"
                     },
-                    uri: "https://hooks.slack.com/services/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",
+                    uri: process.env.WEBHOOK,
                     method: "POST",
                     json: jsonBlob
                 };
