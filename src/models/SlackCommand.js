@@ -16,6 +16,10 @@ export default class SlackCommand {
             this.project = this.text.split(" ")[0];
             this.text = this.text.substring(this.project.length + 1, this.text.length);
         }
+        /**
+         * @todo update task creation to handle hours worked on task
+         * if this.text ends with number, assume it is hours. extract to this.hours and remove from this.text
+         */
     }
 
     getSubCommands() {

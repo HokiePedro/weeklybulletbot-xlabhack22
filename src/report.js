@@ -1,16 +1,28 @@
 import * as pg from './utils/pgConnector.js';
-// with a given amount of time, get the data and format it
+
+/**
+ * Get report from database
+ * @param {SlackCommand} slackCom - original slack command object
+ * @return promise of db query which returns formatted markdown
+ */
 export function generateReport(slackCom) {
     const dateEnum = getDateEnumFromTime(slackCom.text);
     console.log("dateEnum = ", dateEnum)
+    /**
+     * @todo message select should not need `like` to find user
+     * @todo update Report.generateReport() to use stored procedure which handles date ranges
+     */
     const query = `SELECT * FROM lumberjack.messages WHERE user_id LIKE '${slackCom.userId}%'`;
     console.log(query);
     return pg.executeQuery(query)
         .then((dbResult) => formatRows(dateEnum, dbResult.rows))
 }
 
-// Returns a psql date range for the given enum time value
-// returns one of (today, yesterday, this_week, last_week, this_month, last_month)
+/**
+ * converts user entered text to an enum value
+ * @param {string} time - some text from `/timber report [time]`
+ * @return enum of ("today", "yesterday", "this_week", "last_week", "this_month", "last_month")
+ */
 function getDateEnumFromTime(time) {
     let dateEnum = "today";
     if(time.startsWith("yesterday")) {
@@ -39,6 +51,12 @@ function getDateEnumFromTime(time) {
     return dateEnum;
 }
 
+/**
+ * Create the markdown rows for a report. Groups by project name
+ * @param {string} dateEnum - enum from getDateEnumFromTime
+ * @param {array} rows - array of rows from database
+ * @return markdown string
+ */
 function formatRows(dateEnum, rows) {
     // separate into groups by project
     // generate markdown

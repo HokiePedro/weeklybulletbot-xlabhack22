@@ -13,11 +13,8 @@ const port = 3000;
 /**
  * @todo create user if they don't exist
  *      during user creation, update their home view of the app
- * @todo update Report.generateReport() to use stored procedure which handles date ranges
- * @todo update task creation to handle hours worked on task
- * @todo open modal for report, not send message
- * @todo `/timber task` should open a clean modal to create the task
- * @todo log new tasks to messages section of bot, not as a response
+ * @todo Create the ability to edit a task?
+ * @todo Admin feature to create a team report
  */
 
 app.all('*', function (req, res, next) {
@@ -32,6 +29,9 @@ app.post('/', function (req, res) {
 
     switch (slackCom.subCommand) {
         case "report":
+            /**
+             * @todo open modal with report in textbox rather than a reply message
+             */
             Report.generateReport(slackCom)
                 .then((md) => {
                     res.json(Slack.getMdBlock(md));
@@ -41,6 +41,9 @@ app.post('/', function (req, res) {
             handleHelp(res);
             break;
         case "task":
+            /**
+             * `/timber task` should open a clean modal to create the task
+             */
             Task.createTask(slackCom)
                 .then((md) => {
                     res.json(Slack.getMdBlock(md));
