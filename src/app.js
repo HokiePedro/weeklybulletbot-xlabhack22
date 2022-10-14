@@ -23,26 +23,7 @@ app.post('/', function (req, res) {
     console.log(req.body);
     switch (slackCom.subCommand) {
         case "report":
-            let channelId = req.body.channel_id;
-            let userId = req.body.user_id;
-            let messageOptions = updateMessage(slackCom.text);
             console.log(slackCom);
-
-            let taskOptions = {
-                headers: {
-                    "Content-Type" : "application/json"
-                },
-                uri: "https://hooks.slack.com/services/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",
-                method: "POST",
-                json: messageOptions
-            };
-
-            request(taskOptions, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    console.log(body.id) // Print the shortened url.
-                }
-            });
-            break;
         case "help":
             handleHelp(res);
             break;
@@ -55,6 +36,7 @@ app.post('/', function (req, res) {
                 console.log(taskList);
                 let jsonBlob = updateMessage(taskList);
 
+                //contain webhook uri to send message to lumberjack app message tab
                 let taskOptions = {
                     headers: {
                         "Content-Type" : "application/json"
