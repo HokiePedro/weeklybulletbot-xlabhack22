@@ -22,6 +22,7 @@ app.post('/', function (req, res) {
 
     switch (slackCom.subCommand) {
         case "report":
+            Report.generateReport()
             res.json({ body: "show report modal" });
             break;
         case "help":
